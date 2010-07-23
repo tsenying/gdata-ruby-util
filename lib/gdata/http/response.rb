@@ -39,6 +39,20 @@ module GData
           return nil
         end
       end
+      
+      # Converts the response body into a Nokogiri::XML::Document
+      def parse_xml
+        Nokogiri::XML(@body)
+        # if @body
+        #   begin
+        #     return Nokogiri::XML(@body)
+        #   rescue
+        #     raise Nokogiri::XML::SyntaxError, "Response body not XML."
+        #   end
+        # else
+        #   return nil
+        # end
+      end
     end
   end
 end

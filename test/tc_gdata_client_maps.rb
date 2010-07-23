@@ -19,6 +19,11 @@ class TC_GData_Auth_ClientLogin < Test::Unit::TestCase
   
   include TestHelper
   
+  def setup
+    @client = GData::Client::Maps.new
+    @client.clientlogin(self.get_username, self.get_password)
+  end
+  
   def test_get_token
     client_login = GData::Auth::ClientLogin.new('local')
     source = 'GDataUnitTest'
@@ -29,11 +34,53 @@ class TC_GData_Auth_ClientLogin < Test::Unit::TestCase
   
   def test_specify_account_type
     gp = GData::Client::Maps.new
-    gp.source = 'GDataUnitTest'
     assert_nothing_raised do
       token = gp.clientlogin(self.get_username(), self.get_password(), nil, nil, nil, 'GOOGLE')
     end
   end
   
+  def test_get_all   
+    response = @client.get_all
+    self.assert_equal(200, response.status_code, 'Must not be a redirect.')
+    feed = response.to_xml
+    self.assert_not_nil(feed, 'feed can not be nil')
+    
+    xml_doc = response.parse_xml
+    node_set = xml_doc.css('feed id')
+    assert_not_equal 0, node_set.size
+    id_content = node_set[0].content
+    
+    # get_all by userID
+    re = Regexp.new("#{@client.feeds_url}/maps/(\\d+)")
+    match = re.match id_content
+    assert_not_nil match, 'should be able to get match on userID from id element'
+    assert_not_nil match[1], 'should be able to get userID from id element'
+    
+    userID = match[1]
+    response = @client.get_all userID
+    xml_doc = response.parse_xml
+    node_set = xml_doc.css('feed id')
+    assert_not_equal 0, node_set.size
+    id_content = node_set[0].content
+    
+    match = re.match id_content
+    assert_equal userID, match[1]
+
+    post_href = xml_doc.at_css("link[rel$='#post']")['href']
+    re = Regexp.new("#{@client.feeds_url}/maps/(\\d+)/full")
+    assert re =~ post_href
+    # puts "post_href=#{post_href}"
+  end
+  
+  def test_create
+    response = @client.create_map("GData::Client::Maps Test", "Test Map.")
+    assert_equal 201, response.status_code
+    xml_doc = response.parse_xml
+    assert_equal "GData::Client::Maps Test", xml_doc.at_css('entry title').content
+    
+    # clean up
+    response = @client.delete_map(xml_doc.at_css("link[rel='edit']")['href'])
+    assert_equal 200, response.status_code
+  end
   
 end

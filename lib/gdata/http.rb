@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+require 'nokogiri'
+
 require 'gdata/http/default_service'
 require 'gdata/http/mime_body'
 require 'gdata/http/request'
