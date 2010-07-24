@@ -14,10 +14,12 @@
 
 require 'rubygems'
 require 'yaml'
+gem 'test-unit' # to get test-unit 2.x
 require 'test/unit'
 require 'test/unit/ui/console/testrunner'
 
 $:.unshift File.join(File.dirname(__FILE__), '..', 'lib')
+# puts "$:=#{$:.inspect}"
 require 'gdata'
 
 module TestHelper
@@ -43,6 +45,32 @@ module TestHelper
   
   def get_authsub_private_key()
     return self.get_config()['authsub_private_key']
+  end
+  
+  # class methods
+  module ClassMethods
+    def get_config()
+      if not defined?(@@config_file)
+        @@config_file = YAML::load_file(File.join(File.dirname(__FILE__), 'test_config.yml'))
+      end
+      return @@config_file
+    end
+  
+    def get_username()
+      return self.get_config()['username']
+    end
+  
+    def get_password()
+      return self.get_config()['password']
+    end
+  
+    def get_authsub_token()
+      return self.get_config()['authsub_token']
+    end
+  
+    def get_authsub_private_key()
+      return self.get_config()['authsub_private_key']
+    end
   end
   
 end

@@ -42,7 +42,7 @@ module GData
       
       # Converts the response body into a Nokogiri::XML::Document
       def parse_xml
-        Nokogiri::XML(@body)
+        @parsed_xml ||= Nokogiri::XML(@body)
         # if @body
         #   begin
         #     return Nokogiri::XML(@body)
