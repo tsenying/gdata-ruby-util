@@ -22,11 +22,11 @@ class TC_GData_Maps_Map < Test::Unit::TestCase
   def self.startup
     @@client = GData::Client::Maps.new
     @@client.clientlogin(self.get_username, self.get_password)
-    @@test_map = GData::Maps::Map.create("GData::Maps::Map#create TestCaseMap", "Test Case Map.")
+    @@test_map = GData::Maps::Map.create("GData::Maps::Map", "Test Case Map.")
   end
   
   def self.shutdown
-    @@test_map.delete(@@test_map.at_css("link[rel='edit']")['href'])
+    response = GData::Maps::Map.delete(@@test_map.at_css("link[rel='edit']")['href'])
     @@test_map = nil
     @@client = nil
   end
@@ -37,23 +37,40 @@ class TC_GData_Maps_Map < Test::Unit::TestCase
   def teardown
   end
   
-  def test_create
-    map = GData::Maps::Map.create("GData::Maps::Map::Map#create Test", "Test Map.")
+  def test_create_and_delete_map
+    map = GData::Maps::Map.create("GData::Maps::Map::Map#create Test", "Test test_create_and_delete_map Map.")
+    assert_not_nil map
     assert_equal "GData::Maps::Map::Map#create Test", map.at_css('title').content
     
     # clean up
-    response = @@client.delete(map.at_css("link[rel='edit']")['href'])
+    response = GData::Maps::Map.delete(map.at_css("link[rel='edit']")['href'])
     assert_equal 200, response.status_code
+  end
+  
+  def test_find_by_title
+    map = GData::Maps::Map.find_by_title("GData::Maps::Map")
+    assert_not_nil map
+    assert_equal "GData::Maps::Map", map.at_css('title').content
   end
   
   def test_create_feature
     feature = @@test_map.create_feature('title_str', 'name_str', 'description_str', 
       coordinates_hash = {:longitude => '-105.27', :latitude => '40.015', :elevation => '0.0'})
     assert_not_nil feature
-    puts "\n\n!!!!!debug=#{feature.at_css('atom|content')}"
+    puts "\n\n!!!!!debug=#{feature.feed_entry}"
     assert_equal 'name_str', feature.at_css('atom|content Placemark name').content
   end
   
-
+  def test_update_feature 
+  end
+  
+  def test_delete_feature
+  end
+  
+  def test_find_features
+  end
+  
+  def test_find_features_by_bounding_box
+  end
   
 end

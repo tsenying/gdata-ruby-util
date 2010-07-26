@@ -20,14 +20,18 @@ module GData
       def self.get_all(userID = nil)
         unless userID
           # The default feed requests all maps associated with the authenticated user
-          response = @@client.get "#{feeds_url}/maps/default/full"
+          response = @@client.get "#{@@client.feeds_url}/maps/default/full"
         else
           # The standard metafeed requests all maps associated with the associated userID
-          response = @@client.get "#{feeds_url}/maps/#{userID}/full"
+          response = @@client.get "#{@@client.feeds_url}/maps/#{userID}/full"
         end
-        response.css('entry').map do |entry|
+        response.parse_xml.css('entry').map do |entry|
           Map.new(entry)
         end
+      end
+      
+      def self.find_by_title(title)
+        get_all.find{ |map| map.at_css('title').content == title }
       end
     
       # returns instance of Map
@@ -51,7 +55,8 @@ module GData
         doc.add_child(entry)
       
         response = @@client.post @@client.metafeed_post_url, doc.to_s
-        Map.new response.parse_xml.at_css('entry')
+        feed_entry = response.parse_xml.at_css('entry')
+        feed_entry ? Map.new(feed_entry) : nil
       end
     
       def self.delete(edit_url)
@@ -81,7 +86,9 @@ module GData
       def create_feature(title_str, name_str, description_str = '', 
                          coordinates_hash = {:longitude => nil, :latitude => nil, :elevation => '0.0'})
         response = @@client.post post_url, create_placemark_kml(title_str, name_str, description_str, coordinates_hash)
-        Feature.new response.parse_xml.at_css('atom|entry')
+        # Feature.new response.parse_xml.at_css('atom|entry')
+        feed_entry = response.parse_xml.at_css('atom|entry')
+        feed_entry ? Feature.new(feed_entry) : nil
       end
       
       protected
@@ -125,7 +132,12 @@ module GData
         coordinates = Nokogiri::XML::Node.new 'coordinates', doc
         coordinates.content = "#{coordinates_hash[:longitude]},#{coordinates_hash[:latitude]},#{coordinates_hash[:elevation]}"
         point.add_child coordinates
-      
+
+        # empty style element works around broken API issue
+        # http://groups.google.com/group/google-maps-data-api/browse_thread/thread/2bd1ff4b1e2a8274
+        style = Nokogiri::XML::Node.new 'Style', doc
+        placemark.add_child style
+        
         entry.to_s
       end
     end

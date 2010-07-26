@@ -16,6 +16,7 @@ module GData
   module Maps
     class Base
       # entry element from metafeed or the result from creating a map
+      # instance of Nokogiri::XML::Node
       attr_accessor :feed_entry
     
       @@client = nil

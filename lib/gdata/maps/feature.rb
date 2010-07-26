@@ -15,6 +15,37 @@
 module GData
   module Maps
     class Feature < Base
+      
+      def self.delete(feature)
+        edit_url = nil
+        if feature.instance_of? String and feature =~ Regexp.new('^http://maps.google.com/maps/feeds/features/[[:xdigit:]]+/[[:xdigit:]]+/full/[[:xdigit:]]+$')
+          edit_url = feature
+        elsif feature.instance_of? Feature
+          edit_url = feature.edit_url
+        end
+        raise(ArgumentError, 'Edit url cannot be determined') unless edit_url
+        
+        response = @@client.delete edit_url
+      end
+      
+      def self_url
+        feed_entry.at_css('atom|link[rel="self"]')['href']
+      end
+      
+      def edit_url
+        feed_entry.at_css('atom|link[rel="edit"]')['href']
+      end
+      
+      def update(atom_entry_xml)
+        response = @@client.put edit_url, atom_entry_xml
+        feed_entry = response.parse_xml.at_css('atom|entry')
+        @feed_entry = feed_entry if feed_entry
+        feed_entry ? self : nil
+      end
+      
+      def update!(atom_entry_xml)
+        update(atom_entry_xml) || raise('Failed to update feature.')
+      end
     end
   end
 end
