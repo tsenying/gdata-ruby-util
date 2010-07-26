@@ -1,4 +1,4 @@
-# Copyright (C) 2008 Google Inc.
+# Copyright (C) 2010 Ying Tsen Hong
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -12,12 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-$:.unshift(File.dirname(__FILE__))
-
-require 'gdata/http'
-require 'gdata/client'
-require 'gdata/auth'
-require 'gdata/maps'
-# This is for Unicode "support"
-require 'jcode'
-$KCODE = 'UTF8'
+require 'gdata/maps/base'
+require 'gdata/maps/map'
+require 'gdata/maps/feature'

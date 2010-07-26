@@ -15,7 +15,7 @@
 $:.unshift(File.dirname(__FILE__))
 require 'test_helper'
 
-class TC_GData_Auth_ClientLogin < Test::Unit::TestCase
+class TC_GData_Client_Maps < Test::Unit::TestCase
   include TestHelper
   extend  TestHelper::ClassMethods
   
@@ -101,6 +101,11 @@ class TC_GData_Auth_ClientLogin < Test::Unit::TestCase
     assert_equal 201, response.status_code
     puts response.body
     assert_equal 'name_str', response.parse_xml.at_css('atom|entry Placemark name').content
+  end
+  
+  def test_metafeed_post_url
+    result = @@client.metafeed_post_url
+    assert_equal "#{@@client.feeds_url}/maps/#{@@client.userID}/full", result
   end
   
 end

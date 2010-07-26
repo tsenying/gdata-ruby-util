@@ -1,0 +1,6 @@
+maps:
+  feeds_url: "http://maps.google.com/maps/feeds"
+  client_login_service: local
+  authsub_scope: http://maps.google.com/maps/feeds
+  username: twittertruck
+  password: "!8truck9"
