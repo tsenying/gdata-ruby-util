@@ -67,6 +67,10 @@ module GData
       def feature_feed_url
         feed_entry.at_css("content")['src']
       end
+      
+      def search_feed_url
+        feature_feed_url#.sub!(/full/, 'snippet')
+      end
     
       def post_url
         response = @@client.get feature_feed_url
@@ -89,6 +93,17 @@ module GData
         # Feature.new response.parse_xml.at_css('atom|entry')
         feed_entry = response.parse_xml.at_css('atom|entry')
         feed_entry ? Feature.new(feed_entry) : nil
+      end
+      
+      # The following search parameters are currently supported:
+      # [mq] implements a maps query, passing an array of one or more attribute matches. (See Attribute Search below.)
+      # [box] specifies the bounding box of a geographic area over which to implement the search. The box parameter takes four comma-separate arguments in the order west,south,east,north. (See Spatial Search below.)
+      # [lat] and lng specifies a center point from which to implement the search. This location is used in conjunction with the radius argument to specify a circular area over which to search. (See Spatial Search below.)
+      # [radius] specifies the radius, in meters, from a center point (specified in the lat and lng parameters), over which to implement a search. (See Spatial Search below.)
+      # [sortby] indicates that the results should be returned sorted by a passed constraint. Currently, only sortby=distance is supported. (See Sorting Searches below.)
+      def find_features(query)
+        puts "find_features:url =#{search_feed_url}?#{CGI.escape query}"
+        response = @@client.get "#{search_feed_url}?#{CGI.escape query}"
       end
       
       protected

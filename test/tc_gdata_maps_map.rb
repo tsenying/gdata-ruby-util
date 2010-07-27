@@ -23,6 +23,8 @@ class TC_GData_Maps_Map < Test::Unit::TestCase
     @@client = GData::Client::Maps.new
     @@client.clientlogin(self.get_username, self.get_password)
     @@test_map = GData::Maps::Map.create("GData::Maps::Map", "Test Case Map.")
+    @@test_feature = @@test_map.create_feature('Feature Title', 'Feature Name', 'Feature Description', 
+      coordinates_hash = {:longitude => '-105.2701', :latitude => '40.0151', :elevation => '1000.0'})
   end
   
   def self.shutdown
@@ -71,6 +73,22 @@ class TC_GData_Maps_Map < Test::Unit::TestCase
   end
   
   def test_find_features_by_bounding_box
+    # box=west,south,east,north, e.g. box=-109,37,-102,41
+    # box = 'box=-105.3,40.0,-105.0,40.1'
+    box = 'box=-109,37,-102,41'
+    response = @@test_map.find_features(box)
+    puts "response=#{response.parse_xml}"
+    entries = response.parse_xml.css('atom|entry')
+    assert_not_equal 0, entries.size
+    assert entries.find { |entry| entry.at_css('Placemark name').content == 'Feature Name'}
   end
   
+  def test_find_features_by_radius
+    radius = 'radius=10000&lng=-105.27&lat=40.015'
+    response = @@test_map.find_features(radius)
+    puts "response=#{response.parse_xml}"
+    entries = response.parse_xml.css('atom|entry')
+    assert_not_equal 0, entries.size
+    assert entries.find { |entry| entry.at_css('Placemark name').content == 'Feature Name'}
+  end
 end
