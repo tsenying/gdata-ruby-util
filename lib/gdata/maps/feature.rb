@@ -16,6 +16,12 @@ module GData
   module Maps
     class Feature < Base
       
+      def self.find(self_url)
+        response = @@client.get self_url
+        entry = response.parse_xml.at_css('atom|entry')
+        entry ? Feature.new(entry) : nil
+      end
+      
       def self.delete(feature)
         edit_url = nil
         if feature.instance_of? String and feature =~ Regexp.new('^http://maps.google.com/maps/feeds/features/[[:xdigit:]]+/[[:xdigit:]]+/full/[[:xdigit:]]+$')

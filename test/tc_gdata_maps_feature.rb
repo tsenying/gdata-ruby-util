@@ -63,6 +63,12 @@ class TC_GData_Maps_Feature < Test::Unit::TestCase
     assert re =~ self_url
   end
   
+  def test_find_by_self_url
+    feature = GData::Maps::Feature.find(@test_feature.self_url)
+    assert_not_nil feature
+    assert_equal feature.at_css('Placemark Point title'), @test_feature.at_css('Placemark Point title')
+  end
+  
   def test_update_feature 
     entry = @@test_feature.feed_entry.clone
     coordinates = entry.at_css('Placemark Point coordinates')
