@@ -113,8 +113,8 @@ module GData
         raise(ArgumentError, "name cannot be nil") unless name_str
         raise(ArgumentError, "longitude cannot be nil") unless coordinates_hash[:longitude]
         raise(ArgumentError, "latitude cannot be nil") unless coordinates_hash[:latitude]
-        raise(ArgumentError, "invalid longidtude #{coordinates_hash[:longitude]}") unless coordinates_hash[:longitude] =~ /^-?((([1]?[0-7][0-9]|[1-9]?[0-9])\.{1}\d{1,6}$)|[1]?[1-8][0]\.{1}0{1,6}$)/
-        raise(ArgumentError, "invalid latidtude #{coordinates_hash[:latitude]}") unless coordinates_hash[:latitude] =~ /^-?([1-8]?[0-9]\.{1}\d{1,6}$|90\.{1}0{1,6}$)/
+        raise(ArgumentError, "invalid longidtude #{coordinates_hash[:longitude]}") unless coordinates_hash[:longitude] =~ /^-?((([1]?[0-7][0-9]|[1-9]?[0-9])\.{1}\d{1,7}$)|[1]?[1-8][0]\.{1}0{1,7}$)/
+        raise(ArgumentError, "invalid latidtude #{coordinates_hash[:latitude]}") unless coordinates_hash[:latitude] =~ /^-?([1-8]?[0-9]\.{1}\d{1,7}$|90\.{1}0{1,7}$)/
       
         doc = Nokogiri::XML::Document.new
         entry = Nokogiri::XML::Node.new "atom:entry", doc
