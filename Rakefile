@@ -49,7 +49,7 @@ spec = Gem::Specification.new do |s|
   s.has_rdoc = true
   s.extra_rdoc_files = ['README', 'LICENSE']
   s.rdoc_options << '--main' << 'README'
-  s.files = FileList.new('[A-Z]*', 'lib/**/*.rb', 'test/**/*') do |fl|
+  s.files = FileList.new('[A-Z]*', 'lib/**/*.rb', 'config/**/*', 'test/**/*') do |fl|
     fl.exclude(/test_config\.yml$/)
   end
   s.description = <<EOF
