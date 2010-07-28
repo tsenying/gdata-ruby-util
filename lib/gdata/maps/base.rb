@@ -22,7 +22,11 @@ module GData
       @@client = nil
       def self.establish_connection
         unless @@client
-          config = YAML.load_file(File.join(File.dirname(__FILE__), '../../../config/gdata.yml'))
+          if defined? RAILS_ROOT
+            config = YAML.load_file(File.join(RAILS_ROOT, 'config/gdata.yml'))
+          else
+            config = YAML.load_file(File.join(File.dirname(__FILE__), '../../../config/gdata.yml'))
+          end
           @@client = GData::Client::Maps.new
           puts "username=#{config['maps']['username']}, password=#{config['maps']['password']}"
           @@client.clientlogin(config['maps']['username'], config['maps']['password'])
