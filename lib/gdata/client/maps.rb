@@ -43,7 +43,7 @@ module GData
       def userID
         unless @userID
           id_content = get_all.parse_xml.at_css('feed id').content
-          re = Regexp.new("#{feeds_url}/maps/(\\d+)")
+          re = Regexp.new("#{feeds_url}/maps/([[:xdigit:]]+)")
           match = re.match id_content
           @userID = match[1]
         end

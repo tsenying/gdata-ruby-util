@@ -13,14 +13,22 @@
 # limitations under the License.
 
 require 'rubygems'
+require 'rake'
 require 'rake/gempackagetask'
 require 'rake/rdoctask'
 require 'rake/testtask'
 
 task :default => [:test]
 
+desc 'Run tests'
 task :test do
   ruby "test/ts_gdata.rb"
+end
+
+desc 'Install gem'
+task :install => [:gem] do
+  file = Dir['pkg/*.gem'].first
+  system "gem install #{file}"
 end
 
 task :prepdoc do
@@ -36,9 +44,9 @@ end
 
 spec = Gem::Specification.new do |s|
   s.platform = Gem::Platform::RUBY
-  s.author = 'Jeff Fisher'
-  s.email = 'jfisher@youtube.com'
-  s.homepage = 'http://code.google.com/p/gdata-ruby-util'
+  s.author = 'Jeff Fisher, Ying Tsen Hong'
+  s.email = 'tsenying@gmail.com, jfisher@youtube.com'
+  s.homepage = 'http://github.com/tsenying/gdata-ruby-util.git'
   s.summary = "Google Data APIs Ruby Utility Library"
   s.rubyforge_project = 'gdata'
   s.name = 'gdata'

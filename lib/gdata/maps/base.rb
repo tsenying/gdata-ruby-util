@@ -22,17 +22,22 @@ module GData
       @@client = nil
       def self.establish_connection
         unless @@client
-          if defined? RAILS_ROOT
-            config = YAML.load_file(File.join(RAILS_ROOT, 'config/gdata.yml'))
+          if defined? Rails
+            # Rails.root is not yet defined when Bundler calls this, assume in Rails.root directory
+            @@config = YAML.load_file(('config/gdata.yml').to_s)
           else
-            config = YAML.load_file(File.join(File.dirname(__FILE__), '../../../config/gdata.yml'))
+            @@config = YAML.load_file(File.join(File.dirname(__FILE__), '../../../config/gdata.yml'))
           end
           @@client = GData::Client::Maps.new
-          puts "username=#{config['maps']['username']}, password=#{config['maps']['password']}"
-          @@client.clientlogin(config['maps']['username'], config['maps']['password'])
+          puts "username=#{@@config['maps']['username']}, password=#{@@config['maps']['password']}"
+          @@client.clientlogin(@@config['maps']['username'], @@config['maps']['password'])
         end
       end
       establish_connection()
+      
+      def self.config
+        @@config
+      end
       
       def initialize(entry)
         @feed_entry = entry
