@@ -1,6 +1,21 @@
-maps:
+gdata_maps_production:
   feeds_url: "http://maps.google.com/maps/feeds"
   client_login_service: local
   authsub_scope: http://maps.google.com/maps/feeds
   username: twittertruck
   password: "!8truck9"
+
+gdata_maps_development:
+  feeds_url: "http://maps.google.com/maps/feeds"
+  client_login_service: local
+  authsub_scope: http://maps.google.com/maps/feeds
+  username: twittertruck
+  password: "!8truck9"
+
+gdata_maps_production:
+  feeds_url: "http://maps.google.com/maps/feeds"
+  client_login_service: local
+  authsub_scope: http://maps.google.com/maps/feeds
+  username: twittertruck
+  password: "!8truck9"
+    

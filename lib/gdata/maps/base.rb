@@ -23,14 +23,18 @@ module GData
       def self.establish_connection
         unless @@client
           if defined? Rails
+            gdata_maps_config = "gdata_maps_#{RAILS_ENV}"
             # Rails.root is not yet defined when Bundler calls this, assume in Rails.root directory
-            @@config = YAML.load_file(('config/gdata.yml').to_s)
+            configurations = YAML.load_file(('config/gdata.yml').to_s)
+            @@config = configurations[gdata_maps_config]
           else
-            @@config = YAML.load_file(File.join(File.dirname(__FILE__), '../../../config/gdata.yml'))
+            gdata_maps_config = "gdata_maps_" + (ENV['DB'] || "development")
+            configurations = YAML.load_file(File.join(File.dirname(__FILE__), '../../../config/gdata.yml'))
+            @@config = configurations[gdata_maps_config]
           end
           @@client = GData::Client::Maps.new
-          puts "username=#{@@config['maps']['username']}, password=#{@@config['maps']['password']}"
-          @@client.clientlogin(@@config['maps']['username'], @@config['maps']['password'])
+          puts "username=#{@@config['username']}, password=#{@@config['password']}"
+          @@client.clientlogin(@@config['username'], @@config['password'])
         end
       end
       establish_connection()
