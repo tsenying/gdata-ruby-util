@@ -4,6 +4,7 @@ gdata_maps_production:
   authsub_scope: http://maps.google.com/maps/feeds
   username: twittertruck
   password: "!8truck9"
+  map: tweetruck
 
 gdata_maps_development:
   feeds_url: "http://maps.google.com/maps/feeds"
@@ -11,11 +12,13 @@ gdata_maps_development:
   authsub_scope: http://maps.google.com/maps/feeds
   username: twittertruck
   password: "!8truck9"
+  map: tweetruck
 
-gdata_maps_production:
+gdata_maps_test:
   feeds_url: "http://maps.google.com/maps/feeds"
   client_login_service: local
   authsub_scope: http://maps.google.com/maps/feeds
   username: twittertruck
   password: "!8truck9"
+  map: tweetruck_test
     
