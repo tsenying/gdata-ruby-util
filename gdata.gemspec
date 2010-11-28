@@ -17,11 +17,11 @@ EOF
 
   s.rubyforge_project      = 'gdata-ruby-util'
 
-  s.files = FileList.new('[A-Z]*', 'lib/**/*.rb', 'config/**/*', 'test/**/*') do |fl|
-    fl.exclude(/test_config\.yml$/)
-  end
-  s.test_files             = FileList['test/ts_gdata.rb']
-  s.require_paths          = ['lib']
+  s.files       = `git ls-files`.split("\n").reject {|f| ['test/test_config\.yml'].include?(f) }
+  s.test_files  = `git ls-files -- {test,spec,features}/*`.split("\n")
+  #s.executables = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
+
+  s.require_paths = ['lib']
 
   s.has_rdoc         = true
   s.extra_rdoc_files = ['README', 'LICENSE']
