@@ -29,6 +29,14 @@ class TC_GData_HTTP_Request < Test::Unit::TestCase
     service = GData::HTTP::DefaultService.new
     
     response = service.make_request(request)
+
+    if response.status_code == 302
+      request = GData::HTTP::Request.new(response.headers['location'])
+
+      service = GData::HTTP::DefaultService.new
+
+      response = service.make_request(request)
+    end
     
     assert_equal(200, response.status_code)
   end
