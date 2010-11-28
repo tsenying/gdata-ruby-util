@@ -12,11 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-require 'rubygems'
-require 'rake'
-require 'rake/gempackagetask'
-require 'rake/rdoctask'
-require 'rake/testtask'
+require 'bundler'
+Bundler::GemHelper.install_tasks
 
 task :default => [:test]
 
@@ -25,48 +22,6 @@ task :test do
   ruby "test/ts_gdata.rb"
 end
 
-desc 'Install gem'
-task :install => [:gem] do
-  file = Dir['pkg/*.gem'].first
-  system "gem install #{file}"
-end
-
-task :prepdoc do
-  all_doc_files = FileList.new('doc/**/*')
-  all_doc_files.each do |file|
-    system "hg add #{file}"
-  end
-end
-
 task :doc do
   system "rdoc -U --title 'gdata module documentation' -m README README lib/"
-end
-
-spec = Gem::Specification.new do |s|
-  s.platform = Gem::Platform::RUBY
-  s.author = 'Jeff Fisher, Ying Tsen Hong'
-  s.email = 'tsenying@gmail.com, jfisher@youtube.com'
-  s.homepage = 'http://github.com/tsenying/gdata-ruby-util.git'
-  s.summary = "Google Data APIs Ruby Utility Library"
-  s.rubyforge_project = 'gdata'
-  s.name = 'gdata'
-  s.version = '1.1.1'
-  s.requirements << 'none'
-  s.require_path = 'lib'
-  s.test_files = FileList['test/ts_gdata.rb']
-  s.has_rdoc = true
-  s.extra_rdoc_files = ['README', 'LICENSE']
-  s.rdoc_options << '--main' << 'README'
-  s.files = FileList.new('[A-Z]*', 'lib/**/*.rb', 'config/**/*', 'test/**/*') do |fl|
-    fl.exclude(/test_config\.yml$/)
-  end
-  s.description = <<EOF
-This gem provides a set of wrappers designed to make it easy to work with 
-the Google Data APIs.
-EOF
-end
-
-Rake::GemPackageTask.new(spec) do |pkg|
-  pkg.need_zip = true
-  pkg.need_tar = true
 end
