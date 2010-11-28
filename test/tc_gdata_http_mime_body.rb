@@ -1,3 +1,4 @@
+# encoding: UTF-8
 # Copyright (C) 2008 Google Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -38,9 +39,15 @@ class TC_GData_HTTP_MimeBody < Test::Unit::TestCase
   
   def test_mime_body_string_unicode
     stream = GData::HTTP::MimeBodyString.new('λ')
-    self.assert(stream.read(1), 'Greek character should be two bytes')
-    self.assert(stream.read(1), 'Greek character should be two full bytes')
-    self.assert_equal(false, stream.read(1))
+    if RUBY_VERSION < '1.9'
+      self.assert(stream.read(1), 'Greek character should be two bytes')
+      self.assert(stream.read(1), 'Greek character should be two full bytes')
+      self.assert_equal(false, stream.read(1))
+    else
+      # Ruby 1.9+ reads characters not bytes
+      self.assert(stream.read(1), 'Greek character should be one character')
+      self.assert_equal(false, stream.read(1))
+    end
   end
 
 end

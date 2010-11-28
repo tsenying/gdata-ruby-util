@@ -18,6 +18,9 @@ require 'gdata/http'
 require 'gdata/client'
 require 'gdata/auth'
 require 'gdata/maps'
-# This is for Unicode "support"
-require 'jcode'
-$KCODE = 'UTF8'
+
+if RUBY_VERSION < '1.9'
+  # This is for Unicode "support"
+  require 'jcode'
+  $KCODE = 'UTF8'
+end
