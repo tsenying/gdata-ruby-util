@@ -16,6 +16,7 @@ require 'tc_gdata_client_base'
 require 'tc_gdata_client_calendar'
 require 'tc_gdata_client_photos'
 require 'tc_gdata_client_youtube'
+require 'tc_gdata_client_maps'
 
 class TS_GData_Client
   def self.suite
@@ -24,6 +25,7 @@ class TS_GData_Client
     suite << TC_GData_Client_Calendar.suite
     suite << TC_GData_Client_Photos.suite
     suite << TC_GData_Client_YouTube.suite
+    suite << TC_GData_Client_Maps.suite
     return suite
   end
 end
