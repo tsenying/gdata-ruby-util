@@ -100,7 +100,7 @@ class TC_GData_Client_Maps < Test::Unit::TestCase
       coordinates_hash = {:longitude => '-105.27', :latitude => '40.015', :elevation => '0.0'})
     assert_equal 201, response.status_code
     puts response.body
-    assert_equal 'name_str', response.parse_xml.at_css('atom|entry Placemark name').content
+    assert_equal 'title_str', response.parse_xml.at_css('atom|entry Placemark name').content
   end
   
   def test_metafeed_post_url
