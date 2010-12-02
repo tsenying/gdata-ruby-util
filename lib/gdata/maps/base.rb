@@ -33,7 +33,6 @@ module GData
             @@config = configurations[gdata_maps_config]
           end
           @@client = GData::Client::Maps.new
-          puts "username=#{@@config['username']}, password=#{@@config['password']}"
           @@client.clientlogin(@@config['username'], @@config['password'])
         end
       end
