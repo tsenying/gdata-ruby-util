@@ -1,4 +1,5 @@
 # Google account information
+# create a file called gdata.yml in the config directory with your account info for maps interface
 gdata_maps_production:
   feeds_url: "http://maps.google.com/maps/feeds"
   client_login_service: local
